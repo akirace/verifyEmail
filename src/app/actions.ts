@@ -1,6 +1,6 @@
 "use server";
 
-import { Client, Users } from "node-appwrite";
+import { Account, Client, Users } from "node-appwrite";
 
 interface VerifyResult {
     success: boolean;
@@ -21,12 +21,10 @@ export async function verifyEmailAction(userId: string, secret: string): Promise
         const client = new Client()
             .setEndpoint(endpoint)
             .setProject(projectId)
-            .setKey(apiKey);
 
-        const users = new Users(client);
+        const account = new Account(client);
 
-        // ✅ Correct method for v21.x
-        await users.updateEmailVerification(userId, true);
+        await account.updateVerification(userId, secret);
 
         return { success: true };
     } catch (error: any) {
